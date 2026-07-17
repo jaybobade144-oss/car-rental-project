@@ -80,31 +80,30 @@ export default async function CarsPage({
     orderBy = { rating: "desc" };
   }
 
-  // Query database
-  const totalCars = await prisma.car.count({ where });
-  const totalPages = Math.ceil(totalCars / pageSize);
-
-  const cars = await prisma.car.findMany({
-    where,
-    orderBy,
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    include: {
-      images: {
-        take: 1,
+  // Query database concurrently
+  const [totalCars, cars, allBrandsResult, allTypesResult] = await Promise.all([
+    prisma.car.count({ where }),
+    prisma.car.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: {
+        images: {
+          take: 1,
+        },
       },
-    },
-  });
+    }),
+    prisma.car.groupBy({
+      by: ["brand"],
+    }),
+    prisma.car.groupBy({
+      by: ["type"],
+    }),
+  ]);
 
-  // Get unique brands and categories for filter options
-  const allBrandsResult = await prisma.car.groupBy({
-    by: ["brand"],
-  });
+  const totalPages = Math.ceil(totalCars / pageSize);
   const brandsList = allBrandsResult.map((b) => b.brand).sort();
-
-  const allTypesResult = await prisma.car.groupBy({
-    by: ["type"],
-  });
   const typesList = allTypesResult.map((t) => t.type).sort();
 
   // Helper for rendering page buttons

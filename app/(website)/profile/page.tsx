@@ -24,47 +24,43 @@ export default async function ProfilePage({ searchParams }: PageProps) {
     redirect("/login?redirect=/profile");
   }
 
-  // 2. Fetch User Bookings (with car details, images, payments)
-  const bookings = await prisma.booking.findMany({
-    where: { userId: session.id },
-    orderBy: { createdAt: "desc" },
-    include: {
-      car: {
-        include: {
-          images: { take: 1 },
+  // Fetch User Profile data concurrently
+  const [bookings, wishlist, payments, notifications] = await Promise.all([
+    prisma.booking.findMany({
+      where: { userId: session.id },
+      orderBy: { createdAt: "desc" },
+      include: {
+        car: {
+          include: {
+            images: { take: 1 },
+          },
+        },
+        payments: true,
+      },
+    }),
+    prisma.wishlist.findMany({
+      where: { userId: session.id },
+      include: {
+        car: {
+          include: {
+            images: { take: 1 },
+          },
         },
       },
-      payments: true,
-    },
-  });
-
-  // 3. Fetch User Wishlist (with car details, images)
-  const wishlist = await prisma.wishlist.findMany({
-    where: { userId: session.id },
-    include: {
-      car: {
-        include: {
-          images: { take: 1 },
+    }),
+    prisma.payment.findMany({
+      where: {
+        booking: {
+          userId: session.id,
         },
       },
-    },
-  });
-
-  // 4. Fetch User Payments (using prisma.payment query via booking relation)
-  const payments = await prisma.payment.findMany({
-    where: {
-      booking: {
-        userId: session.id,
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-
-  // 5. Fetch User Notifications
-  const notifications = await prisma.notification.findMany({
-    where: { userId: session.id },
-    orderBy: { createdAt: "desc" },
-  });
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.notification.findMany({
+      where: { userId: session.id },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
   return (
     <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10">

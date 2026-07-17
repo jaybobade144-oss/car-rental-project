@@ -44,10 +44,10 @@ export default function AdminSidebar({ name, email, avatar }: AdminSidebarProps)
           setUnreadContacts(data.filter((m: any) => !m.read).length);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
-  const adminLinks = [
+  const adminLinks: { name: string; path: string; icon: React.ElementType; badge?: number }[] = [
     { name: "Overview Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
     { name: "Cars Inventory", path: "/admin/cars", icon: Car },
     { name: "Bookings Manager", path: "/admin/bookings", icon: Calendar },
@@ -77,9 +77,8 @@ export default function AdminSidebar({ name, email, avatar }: AdminSidebarProps)
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col justify-between border-r border-border/40 bg-card p-5 transition-transform duration-300 md:translate-x-0 md:static shrink-0 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col justify-between border-r border-border/40 bg-card p-5 transition-transform duration-300 md:translate-x-0 md:static shrink-0 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="space-y-6">
           {/* Logo & Title */}
@@ -101,15 +100,14 @@ export default function AdminSidebar({ name, email, avatar }: AdminSidebarProps)
                   key={link.path}
                   href={link.path}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
-                    active
+                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${active
                       ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
                       : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   <Icon className="h-4.5 w-4.5" />
                   <span className="flex-1">{link.name}</span>
-                  {link.badge > 0 && (
+                  {(link.badge ?? 0) > 0 && (
                     <span className="rounded-full bg-rose-500 text-white text-[9px] px-1.5 py-0.5 font-bold leading-none">
                       {link.badge}
                     </span>
@@ -164,7 +162,7 @@ export default function AdminSidebar({ name, email, avatar }: AdminSidebarProps)
                 <p className="text-[9px] text-muted-foreground">Admin</p>
               </div>
             </div>
-            
+
             <button
               onClick={handleLogout}
               className="rounded-lg p-1.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all"

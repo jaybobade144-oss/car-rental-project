@@ -38,6 +38,7 @@ function LoginForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -163,15 +164,31 @@ function LoginForm() {
           <Link href={`/register${searchParams.toString() ? `?${searchParams.toString()}` : ""}`} className="text-primary font-bold hover:underline">
             Register Here
           </Link>
-          <div className="mt-4 flex justify-center gap-3 text-[10px] text-muted-foreground border-t border-border/20 pt-4">
-            <div>
-              <span className="font-semibold text-foreground">Test User: </span>
-              user@rentcar.com / user123
-            </div>
-            <div>
-              <span className="font-semibold text-foreground">Test Admin: </span>
-              admin@rentcar.com / admin123
-            </div>
+          <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3 text-[10px] text-muted-foreground border-t border-border/20 pt-4">
+            <button
+              type="button"
+              onClick={() => {
+                setValue("email", "user@rentcar.com");
+                setValue("password", "user123");
+                setTimeout(() => handleSubmit(onSubmit)(), 50);
+              }}
+              className="flex flex-col items-center justify-center bg-secondary/30 hover:bg-primary/10 border border-border/30 hover:border-primary/20 rounded-xl p-2.5 cursor-pointer transition-all w-full text-center"
+            >
+              <span className="font-semibold text-foreground text-xs">Test User (Autologin)</span>
+              <span>user@rentcar.com / user123</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setValue("email", "admin@rentcar.com");
+                setValue("password", "admin123");
+                setTimeout(() => handleSubmit(onSubmit)(), 50);
+              }}
+              className="flex flex-col items-center justify-center bg-secondary/30 hover:bg-primary/10 border border-border/30 hover:border-primary/20 rounded-xl p-2.5 cursor-pointer transition-all w-full text-center"
+            >
+              <span className="font-semibold text-foreground text-xs">Test Admin (Autologin)</span>
+              <span>admin@rentcar.com / admin123</span>
+            </button>
           </div>
         </div>
       </motion.div>

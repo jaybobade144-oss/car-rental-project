@@ -9,39 +9,39 @@ export const revalidate = 0; // Fetch fresh data on load
 
 export default async function HomePage() {
   // Server-side fetching from SQLite
-  const locations = await prisma.location.findMany({
-    select: { id: true, name: true },
-  });
-
-  const featuredCars = await prisma.car.findMany({
-    take: 6,
-    include: {
-      images: {
-        take: 1,
-      },
-    },
-  });
-
-  const reviews = await prisma.review.findMany({
-    take: 3,
-    include: {
-      user: {
-        select: {
-          name: true,
-          avatar: true,
+  const [locations, featuredCars, reviews] = await Promise.all([
+    prisma.location.findMany({
+      select: { id: true, name: true },
+    }),
+    prisma.car.findMany({
+      take: 6,
+      include: {
+        images: {
+          take: 1,
         },
       },
-      car: {
-        select: {
-          name: true,
-          brand: true,
+    }),
+    prisma.review.findMany({
+      take: 3,
+      include: {
+        user: {
+          select: {
+            name: true,
+            avatar: true,
+          },
+        },
+        car: {
+          select: {
+            name: true,
+            brand: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+  ]);
 
   return (
     <div className="w-full pb-20">

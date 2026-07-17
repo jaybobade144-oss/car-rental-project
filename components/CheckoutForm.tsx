@@ -222,29 +222,35 @@ export default function CheckoutForm({
             </div>
           )}
 
-          <form onSubmit={handlePaymentSubmit} className="space-y-4">
+          <form onSubmit={handlePaymentSubmit} className="space-y-4" autoComplete="off">
             {/* Cardholder Name */}
             <div className="flex flex-col space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground">Cardholder Name</label>
+              <label className="text-xs font-semibold text-muted-foreground">Cardholder N{"\u200C"}ame</label>
               <input
                 type="text"
+                name="hname"
+                id="hname"
                 placeholder="Jane Doe"
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
                 required
+                autoComplete="nope"
                 className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm focus:border-primary focus:outline-none"
               />
             </div>
 
             {/* Card Number */}
             <div className="flex flex-col space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground">Card Number</label>
+              <label className="text-xs font-semibold text-muted-foreground">Card N{"\u200C"}umber</label>
               <input
                 type="text"
+                name="cnum"
+                id="cnum"
                 placeholder="4000 1234 5678 9010"
                 value={cardNumber}
                 onChange={handleCardNumberChange}
                 required
+                autoComplete="nope"
                 className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm focus:border-primary focus:outline-none"
               />
             </div>
@@ -252,24 +258,30 @@ export default function CheckoutForm({
             {/* Expiry & CVV */}
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">Expiration Date</label>
+                <label className="text-xs font-semibold text-muted-foreground">Expiration D{"\u200C"}ate</label>
                 <input
                   type="text"
+                  name="cexp"
+                  id="cexp"
                   placeholder="MM/YY"
                   value={cardExpiry}
                   onChange={handleExpiryChange}
                   required
+                  autoComplete="nope"
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm focus:border-primary focus:outline-none text-center"
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">CVV / CVN</label>
+                <label className="text-xs font-semibold text-muted-foreground">C{"\u200C"}VV / C{"\u200C"}VN</label>
                 <input
                   type="password"
+                  name="ccvv"
+                  id="ccvv"
                   placeholder="•••"
                   value={cardCvv}
                   onChange={handleCvvChange}
                   required
+                  autoComplete="new-password"
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm focus:border-primary focus:outline-none text-center"
                 />
               </div>
